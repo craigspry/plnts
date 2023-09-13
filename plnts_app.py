@@ -56,9 +56,11 @@ def do_location_lookup(address):
 class Planets(object):
     @cherrypy.expose
     def index(self, city=None):
+        lat = 0
+        lon = 0
         if city:
             location = do_city_lookup(city)
-            if city:
+            if location:
                 lat = location[2]
                 lon = location[3]
         else:
@@ -67,7 +69,7 @@ class Planets(object):
             lat, lon, city = do_location_lookup(location)
 
         user_agent = cherrypy.request.headers.get('User-Agent')
-        rtn = f"Plantes rise set for {city}\n"
+        rtn = f"Plantes rise set time in UTC for {city}\n"
         rtn += "  Body           |Elevation|Azimuth  |Rise Time            |Set Time             |Transit Time\n"
         rtn += "--------------------------------------------------------------------------------------------------------\n"
         sun = ephem.Sun()
