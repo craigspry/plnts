@@ -95,4 +95,8 @@ class Planets(object):
 
 
 if __name__ == '__main__':
+    cherrypy.config.update({'server.socket_port': int(8080),
+                            'server.thread_pool': 10,
+                            'server.socket_host': "0.0.0.0",
+                            })
     cherrypy.quickstart(Planets(), '/')
