@@ -1,15 +1,17 @@
-# Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+RUN useradd --create-home --uid 10001 plnts
 
-# Install any needed packages specified in requirements.txt
-RUN pip3 install --trusted-host pypi.python.org -r requirements.txt
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-CMD python plnts_app.py 
-# Make port 8080 available to the world outside this container
+COPY plnts_app.py .
+COPY geoip/worldcities.csv geoip/worldcities.csv
+COPY geoip/GeoLite2-City_20230908/GeoLite2-City.mmdb geoip/GeoLite2-City_20230908/GeoLite2-City.mmdb
+
+USER plnts
 EXPOSE 8080
+ENV PORT=8080
+CMD ["python", "plnts_app.py"]
